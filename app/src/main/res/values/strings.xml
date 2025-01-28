@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">StudyApp</string>
+    <string name="show_less">Show less</string>
+    <string name="show_more">Show more</string>
+    <string name="title_check">Title Check</string>
+    <string name="title_edit">Title Edit</string>
+    <string name="task_add">Task Add</string>
+    <string name="task_sub">Task Sub</string>
+</resources>
