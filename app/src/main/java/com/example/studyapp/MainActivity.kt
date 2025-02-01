@@ -225,39 +225,42 @@ fun TaskCompletionGraph(subjects: List<Subject>) {
             text = "教科ごとの進捗",
             style = MaterialTheme.typography.headlineMedium,
             )
-        subjects.forEach { subject ->
-            val completionPercentage = completionPercentage(subject)
-            Box(modifier = Modifier.padding(vertical = 10.dp)) {
-                Box(
-                    modifier = Modifier
-                        .height(100.dp)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Color.White)
-                        .border(
-                            width = 8.dp,
-                            color = MaterialTheme.colorScheme.primary ,
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                )
-                Box(
-                    modifier = Modifier
-                        .height(84.dp)
-                        .fillMaxWidth(completionPercentage.div(100f))
-                        .padding(start = 8.dp)
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                        .align(Alignment.CenterStart)
-                )
-                Text(
-                    text = subject.name,
-                    Modifier.align(Alignment.Center),
-                    fontSize = 36.sp
-                )
-//                Text(
-//                    text = "$completionPercentage%",
-//                    style = MaterialTheme.typography.bodyMedium,
-//                    textAlign = TextAlign.End,
-//                )
+        LazyColumn {
+            items(subjects) { subject ->
+                val completionPercentage = completionPercentage(subject).toFloat()
+
+                Box(modifier = Modifier.padding(vertical = 10.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .height(100.dp)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color.White)
+                            .border(
+                                width = 8.dp,
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .height(84.dp)
+                            .fillMaxWidth(completionPercentage.div(100f))
+                            .padding(horizontal = 8.dp)
+                            .background(MaterialTheme.colorScheme.primaryContainer)
+                            .align(Alignment.CenterStart)
+                    )
+                    Text(
+                        text = subject.name,
+                        Modifier.align(Alignment.Center),
+                        fontSize = 36.sp
+                    )
+                    //                Text(
+                    //                    text = "$completionPercentage%",
+                    //                    style = MaterialTheme.typography.bodyMedium,
+                    //                    textAlign = TextAlign.End,
+                    //                )
+                }
             }
         }
     }
