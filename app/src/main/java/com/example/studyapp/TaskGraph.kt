@@ -52,9 +52,9 @@ fun TaskCompletionGraph(subjects: List<Subject>) {
                     )
                     Box(
                         modifier = Modifier
+                            .padding(horizontal = 8.dp)
                             .height(84.dp)
                             .fillMaxWidth(completionPercentage.div(100f))
-                            .padding(horizontal = 8.dp)
                             .background(MaterialTheme.colorScheme.primaryContainer)
                             .align(Alignment.CenterStart)
                     )
