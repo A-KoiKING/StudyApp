@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.DoneOutline
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Edit
@@ -47,7 +48,8 @@ import com.example.studyapp.ui.theme.StudyAppTheme
 
 
 sealed class StudyAppScreen(val route: String) {
-    data object Start : StudyAppScreen("start")
+    data object Home : StudyAppScreen("home")
+    data object Edit : StudyAppScreen("edit")
     data object Share : StudyAppScreen("share")
 }
 
@@ -97,15 +99,15 @@ fun StudyApp(modifier: Modifier) {
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = StudyAppScreen.Start.route,
+            startDestination = StudyAppScreen.Home.route,
             modifier = Modifier.padding(padding)
         ) {
-            composable(StudyAppScreen.Start.route) { Greetings(subjects) }
+            composable(StudyAppScreen.Home.route) { Greetings(subjects) }
+            composable(StudyAppScreen.Edit.route) { Greetings(subjects) }
             composable(StudyAppScreen.Share.route) { TaskCompletionGraph(subjects) }
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -158,7 +160,8 @@ fun AppBottomBar(navController: NavController) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     val items = listOf(
-        BottomNavItem("スタート", StudyAppScreen.Start.route, Filled.Home),
+        BottomNavItem("ホーム", StudyAppScreen.Home.route, Filled.Home),
+        BottomNavItem("編集", StudyAppScreen.Edit.route, Filled.Edit),
         BottomNavItem("共有", StudyAppScreen.Share.route, Filled.Share)
     )
 
@@ -181,7 +184,10 @@ fun AppBottomBar(navController: NavController) {
                     )
                 },
                 label = {
-                    Text(item.label)
+                    Text(
+                        item.label,
+                        fontSize = 20.sp
+                    )
                 }
             )
         }
