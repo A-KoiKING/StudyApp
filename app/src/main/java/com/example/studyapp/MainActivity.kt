@@ -3,21 +3,22 @@ package com.example.studyapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.DoneOutline
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,10 +39,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.studyapp.model.Subject
 import com.example.studyapp.model.Task
 import com.example.studyapp.ui.theme.StudyAppTheme
+
 
 sealed class StudyAppScreen(val route: String) {
     data object Start : StudyAppScreen("start")
@@ -87,7 +91,9 @@ fun StudyApp(modifier: Modifier) {
                 onTargetChange = { target = !target }
             )
         },
-        bottomBar = { AppBottomBar(navController) }
+        bottomBar = {
+            AppBottomBar(navController)
+        }
     ) { padding ->
         NavHost(
             navController = navController,
@@ -146,43 +152,43 @@ fun AppTopBar(target: Boolean, text: String, onTextChange: (String) -> Unit, onT
     )
 }
 
-
 @Composable
 fun AppBottomBar(navController: NavController) {
-    BottomAppBar(
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.primary
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    val items = listOf(
+        BottomNavItem("スタート", StudyAppScreen.Start.route, Filled.Home),
+        BottomNavItem("共有", StudyAppScreen.Share.route, Filled.Share)
+    )
+
+    BottomAppBar (
+        containerColor = MaterialTheme.colorScheme.primaryContainer
     ) {
-        Row {
-            Button(
-                onClick = { navController.navigate(StudyAppScreen.Start.route) },
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(4.dp)
-                    .weight(0.5f)
-            ) {
-                Text(
-                    "スタート",
-                    fontSize = 30.sp
-                )
-            }
-            Button(
-                onClick = { navController.navigate(StudyAppScreen.Share.route) },
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(4.dp)
-                    .weight(0.5f)
-            ) {
-                Text(
-                    "共有",
-                    fontSize = 30.sp
-                )
-            }
+        items.forEach { item ->
+            NavigationBarItem(
+                selected = currentRoute == item.route,
+                onClick = {
+                    if (currentRoute != item.route) {
+                        navController.navigate(item.route)
+                    }
+                },
+                icon = {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = item.label,
+                        modifier = Modifier.size(40.dp)
+                    )
+                },
+                label = {
+                    Text(item.label)
+                }
+            )
         }
     }
 }
+
+data class BottomNavItem(val label: String, val route: String, val icon: ImageVector)
 
 
 @Preview
