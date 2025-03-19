@@ -57,6 +57,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    //noinspection UseTomlInstead
     implementation("androidx.compose.material:material-icons-extended")
+    //noinspection GradleDependency,UseTomlInstead
     implementation("androidx.navigation:navigation-compose:2.7.5")
+    //noinspection GradleDependency,UseTomlInstead
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }
